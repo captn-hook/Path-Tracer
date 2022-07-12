@@ -746,4 +746,26 @@ def createCurve(name, crv, d, t):
     # attach to scene
     crv.objects.link(curve)
 
+    m2z = midpoint(tx, ty, tz, mx, my, mz)
+               
+    #point d            
+    line.bezier_points[0].co = (dx, dy, dz)
+    line.bezier_points[0].handle_left = (dx, dy, dz)
+    line.bezier_points[0].handle_right = (m1x, m1y, m1z)    
+                    
+    #midpoint
+    line.bezier_points[1].co = (mx, my, mz)
+    line.bezier_points[1].handle_left = ( m1x, m1y, mz)
+    line.bezier_points[1].handle_right = (m2x, m2y, mz)
+                
+    #point
+    line.bezier_points[2].co = (tx, ty, tz)
+    line.bezier_points[2].handle_left = (m2x, m2y, m2z)
+    line.bezier_points[2].handle_right = (tx, ty, tz)
+            
+    curve = bpy.data.objects.new(name, curveData)
+
+    # attach to scene
+    crv.objects.link(curve)
+
     return curve
