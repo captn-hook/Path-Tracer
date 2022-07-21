@@ -339,6 +339,18 @@ def resetSelection():
     bpy.context.view_layer.active_layer_collection = bpy.data.scenes['Scene'].view_layers['ViewLayer'].layer_collection
 
 #///////////////data file functions
+def transmissionTranspose(trans, columns):
+
+    transmission = []
+
+    print(len(trans) / columns)
+    for n in range(0, columns):
+        for i in range(0, int(len(trans) / columns)):
+            transmission.append(trans[columns * i + n])
+
+    print(trans)
+    print(transmission)
+    return transmission
 
 def newPosList(dsc, tsc):
 
@@ -419,7 +431,15 @@ def datafile(datafilename):
             
             print("dspawn, tspawn, transmission")
             print(len(dspawn), len(tspawn), len(transmission))
-            print(dspawn, tspawn, transmission)
+            print(dspawn)
+            print(tspawn)
+            print(transmission)
+
+            print("TRYINH")
+            
+            transmission = transmissionTranspose(transmission, len(dspawn))
+            
+            print("help")
             return dspawn, tspawn, transmission
 
     elif bpy.context.window_manager.file_path[-4:] == ".txt":
