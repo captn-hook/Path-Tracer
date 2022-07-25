@@ -688,16 +688,20 @@ def tracers(file, crv, arw):
             mat.use_nodes = True
             mat.node_tree.nodes["Principled BSDF"].inputs['Alpha'].default_value = opacity
             mat.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (r, g, b, opacity)
+            mat.node_tree.nodes["Principled BSDF"].inputs['Specular'].default_value = 0.0
+            
 
             #new = mat.node_tree.nodes.new('ShaderNodeRGB')
 
             #mat.node_tree.nodes.remove(mat.node_tree.nodes.get('Principled BSDF'))
 
-            mat.node_tree.links.new(new.outputs[0], mat.node_tree.nodes.get('Material Output').inputs[0])
+            #mat.node_tree.links.new(new.outputs[0], mat.node_tree.nodes.get('Material Output').inputs[0])
             
             mat.blend_method = 'BLEND'
             mat.shadow_method = 'NONE'
-            mat.node_tree.nodes['RGB'].outputs[0].default_value = (r, g, b, opacity)
+            
+            
+            #mat.node_tree.nodes['RGB'].outputs[0].default_value = (r, g, b, opacity)
             
             #end of loop
 

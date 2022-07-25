@@ -15,8 +15,8 @@ bl_info = {
     "name" : "PathTracer",
     "author" : "Tristan Hook",
     "description" : "Traces Paths",
-    "blender" : (3, 1, 0),
-    "version" : (1, 1, 1),
+    "blender" : (3, 2, 0),
+    "version" : (1, 1, 2),
     "location" : "VIEW3D",
     "warning" : "",
     "category" : "Generic"
