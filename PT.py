@@ -686,11 +686,12 @@ def tracers(file, crv, arw):
             tips.data.materials.append(mat)
 
             mat.use_nodes = True
-            #mat.node_tree.nodes["Principled BSDF"].inputs['Alpha'].default_value = opacity
+            mat.node_tree.nodes["Principled BSDF"].inputs['Alpha'].default_value = opacity
+            mat.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (r, g, b, opacity)
 
-            new = mat.node_tree.nodes.new('ShaderNodeRGB')
+            #new = mat.node_tree.nodes.new('ShaderNodeRGB')
 
-            mat.node_tree.nodes.remove(mat.node_tree.nodes.get('Principled BSDF'))
+            #mat.node_tree.nodes.remove(mat.node_tree.nodes.get('Principled BSDF'))
 
             mat.node_tree.links.new(new.outputs[0], mat.node_tree.nodes.get('Material Output').inputs[0])
             
