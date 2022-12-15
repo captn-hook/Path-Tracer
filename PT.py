@@ -399,21 +399,16 @@ def datafile(datafilename):
 
             for row in csv_reader:
                 if line_count == 0:
+                    #names
+                    print(f'Column names are {", ".join(row)}')
 
+                elif line_count == 1:
                     for i in range(1, len(row)):
 
-                        if "/" in row[i]:
-                            x, y, z = tuple(map(float, row[i].split('/')))
-
-                        else:
-                            print(row[i] + " NOT A LOCATION")
-                            x, y, z = (0.0, 0.0, 0.0)
-
-                        dspawn.append((x, y, z))
-                else:
-                    for i in range(0, len(row)):
-
-                        if i == 0:
+                        if i == 1:
+                            print(row[i])
+                        else:                            
+                            print(i, row[i])
 
                             if "/" in row[i]:
                                 x, y, z = tuple(map(float, row[i].split('/')))
@@ -422,7 +417,26 @@ def datafile(datafilename):
                                 print(row[i] + " NOT A LOCATION")
                                 x, y, z = (0.0, 0.0, 0.0)
 
-                            tspawn.append((x, y, z))
+                            dspawn.append((x,  y * -1, z))
+
+                else:
+                    for i in range(0, len(row)):
+
+                        print(i, row[i])
+
+                        if i == 0:
+                            print(row[i])
+
+                        elif i == 1:
+
+                            if "/" in row[i]:
+                                x, y, z = tuple(map(float, row[i].split('/')))
+
+                            else:
+                                print(row[i] + " NOT A LOCATION")
+                                x, y, z = (0.0, 0.0, 0.0)
+
+                            tspawn.append((x, y * -1, z))
                             
                         else:
                             transmission.append(row[i])
