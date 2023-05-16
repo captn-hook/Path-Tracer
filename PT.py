@@ -35,12 +35,13 @@ class OBJECT_Import(Operator):
             return True
         except FileNotFoundError:
             return devmode
+        
     def execute(self, context):
         resetSelection()
 
         #removes old uncollected bg
-        if len(bpy.data.scenes['Scene'].collection.all_objects) >= 0:
-            for i in bpy.data.scenes['Scene'].collection.all_objects:
+        if len(bpy.data.scenes[0].collection.all_objects) >= 0:
+            for i in bpy.data.scenes[0].collection.all_objects:
 
                 if len(i.name) >= 8 and "[PT][BG]" == i.name[0:8]:
                     bpy.data.objects.remove(i, do_unlink=True)
@@ -271,13 +272,13 @@ class BUILD_Tracers(Operator):
                     if found:
                         return found
 
-            layer_collection = bpy.context.view_layer.layer_collection
+            #layer_collection = bpy.context.view_layer.layer_collection
+            #use view_layer 0 instead of context
+            layer_collection = bpy.data.scenes[0].view_layers[0].layer_collection
             layerColl = recurLayerCollection(layer_collection, crv.name)
             bpy.context.view_layer.active_layer_collection = layerColl
 
             bpy.context.view_layer.active_layer_collection.exclude = True
-
-            #       
 
             resetSelection()
 
@@ -288,7 +289,9 @@ class BUILD_Tracers(Operator):
 
 def importmatterport(path):            
     bpy.ops.object.select_all(action='DESELECT')
-    bpy.ops.import_scene.obj(filepath = path, filter_glob = '*.obj;*.mtl', use_image_search = True, split_mode = 'ON', axis_forward = 'Z', axis_up = 'Y')
+    axis1 = ('Z', 'Y')
+    axis2 = ('Y', 'X')
+    bpy.ops.import_scene.obj(filepath = path, filter_glob = '*.obj;*.mtl', use_image_search = True, split_mode = 'ON', axis_forward = axis2[0], axis_up = axis2[1])
     bpy.ops.object.transform_apply(rotation=True)
 
     importdOBJ = bpy.context.selected_objects[0]
@@ -336,7 +339,7 @@ def cut(z, importdOBJ):
 
 def resetSelection():
     bpy.ops.object.select_all(action='DESELECT')
-    bpy.context.view_layer.active_layer_collection = bpy.data.scenes['Scene'].view_layers['ViewLayer'].layer_collection
+    bpy.context.view_layer.active_layer_collection = bpy.data.scenes[0].view_layers[0].layer_collection
 
 #///////////////data file functions
 def transmissionTranspose(trans, columns):
@@ -477,11 +480,11 @@ def datafile(datafilename):
         for line in lines:
             print("LINE #:", i, line)
             if dstart <= i <= dend:
-                line = line[1:-2]
+                line = line[:-2]
                 line = tuple(map(float, line.split('/')))
                 dspawn.append(line)
             if tstart <= i <= tend:
-                line = line[1:-2]
+                line = line[:-2]
                 line = tuple(map(float, line.split('/')))
                 tspawn.append(line)
             if transstart <= i <= transend:

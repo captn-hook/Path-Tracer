@@ -1,6 +1,6 @@
 ﻿# Path-Tracer
 
-To install, use the Blender's Prefrences>Addons>Install from file and use Path-Tracer.zip
+To install, use the Blender's Prefrences>Addons>Install from file, and use Path-Tracer.zip from dling this repo.
 
 Path Tracer is setup to read files in two forms, .txt or .csv. It reads from the directory that the blender file is saved to, so I reccommend saving your projects to their own directory. The example file format is show below:
 
