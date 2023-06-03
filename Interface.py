@@ -1,4 +1,3 @@
-from sqlite3 import Row
 import bpy
 
 from bpy.types import Panel
