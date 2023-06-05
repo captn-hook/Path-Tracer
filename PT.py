@@ -289,9 +289,10 @@ class BUILD_Tracers(Operator):
 
 def importmatterport(path):            
     bpy.ops.object.select_all(action='DESELECT')
+    axis0 = ('X', 'Z')
     axis1 = ('Z', 'Y')
     axis2 = ('Y', 'X')
-    bpy.ops.import_scene.obj(filepath = path, filter_glob = '*.obj;*.mtl', use_image_search = True, split_mode = 'ON', axis_forward = axis1[0], axis_up = axis1[1])
+    bpy.ops.import_scene.obj(filepath = path, filter_glob = '*.obj;*.mtl', use_image_search = True, split_mode = 'ON', axis_forward = axis0[0], axis_up = axis0[1])
     bpy.ops.object.transform_apply(rotation=True)
 
     importdOBJ = bpy.context.selected_objects[0]
@@ -454,19 +455,20 @@ def datafile(datafilename):
                 tend = line_count - 2
                 transstart = line_count + 1
             line_count += 1
-        transend = line_count 
-
+        transend = line_count
+#/Path-Tracer/sample.txt
 
         i = 0
         lines = open(datafilename, "r")
 
         for line in lines:
+            #strip \n
+            line = line.strip()
             if dstart <= i <= dend:
-                line = line[:-2]  #strip newline and comma
                 line = tuple(map(float, line.split('/')))
                 dspawn.append(line)
             if tstart <= i <= tend:
-                line = line[:-2]
+                print(line)
                 line = tuple(map(float, line.split('/')))
                 tspawn.append(line)
             if transstart <= i <= transend:
@@ -474,6 +476,9 @@ def datafile(datafilename):
                 transmission.append(line)
             i += 1
 
+        print('dspawn', dspawn)
+        print('tspawn', tspawn)
+        print('transmission', transmission)
         return dspawn, tspawn, transmission
     else:
         print("DATAFILE ERROR")
