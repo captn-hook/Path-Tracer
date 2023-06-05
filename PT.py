@@ -291,7 +291,7 @@ def importmatterport(path):
     bpy.ops.object.select_all(action='DESELECT')
     axis1 = ('Z', 'Y')
     axis2 = ('Y', 'X')
-    bpy.ops.import_scene.obj(filepath = path, filter_glob = '*.obj;*.mtl', use_image_search = True, split_mode = 'ON', axis_forward = axis2[0], axis_up = axis2[1])
+    bpy.ops.import_scene.obj(filepath = path, filter_glob = '*.obj;*.mtl', use_image_search = True, split_mode = 'ON', axis_forward = axis1[0], axis_up = axis1[1])
     bpy.ops.object.transform_apply(rotation=True)
 
     importdOBJ = bpy.context.selected_objects[0]
@@ -395,6 +395,10 @@ def datafile(datafilename):
     transmission = []
 
     if bpy.context.window_manager.file_path[-4:] == ".csv":
+        # TRNS,-80/14/-2,-107/27/-2,99/-27/-2
+        # -78/-9/-2,1,2,3
+        # 78/-17/2,4,5,6
+        # -87/-14/-2,7,8,9
 
         with open(datafilename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
@@ -402,35 +406,22 @@ def datafile(datafilename):
 
             for row in csv_reader:
                 if line_count == 0:
-                    #names
-                    print(f'Column names are {", ".join(row)}')
-
-                elif line_count == 1:
+                    #range 1 to len(row) to skip the first cell
                     for i in range(1, len(row)):
 
-                        if i == 1:
-                            print(row[i])
-                        else:                            
-                            print(i, row[i])
+                        if "/" in row[i]:
+                            x, y, z = tuple(map(float, row[i].split('/')))
 
-                            if "/" in row[i]:
-                                x, y, z = tuple(map(float, row[i].split('/')))
-
-                            else:
-                                print(row[i] + " NOT A LOCATION")
-                                x, y, z = (0.0, 0.0, 0.0)
-
-                            dspawn.append((x,  y * -1, z))
+                        else:
+                            print(row[i] + " NOT A LOCATION")
+                            x, y, z = (0.0, 0.0, 0.0)
+                        #check if this * -1 is needed
+                        dspawn.append((x,  y * -1, z))
 
                 else:
+                    #lines after 0 are coord,transmission,transmission,transmission,...
                     for i in range(0, len(row)):
-
-                        print(i, row[i])
-
                         if i == 0:
-                            print(row[i])
-
-                        elif i == 1:
 
                             if "/" in row[i]:
                                 x, y, z = tuple(map(float, row[i].split('/')))
@@ -446,17 +437,9 @@ def datafile(datafilename):
 
                 line_count += 1
             
-            print("dspawn, tspawn, transmission")
-            print(len(dspawn), len(tspawn), len(transmission))
-            print(dspawn)
-            print(tspawn)
-            print(transmission)
-
-            print("TRYINH")
             
             transmission = transmissionTranspose(transmission, len(dspawn))
             
-            print("help")
             return dspawn, tspawn, transmission
 
     elif bpy.context.window_manager.file_path[-4:] == ".txt":
@@ -478,9 +461,8 @@ def datafile(datafilename):
         lines = open(datafilename, "r")
 
         for line in lines:
-            print("LINE #:", i, line)
             if dstart <= i <= dend:
-                line = line[:-2]
+                line = line[:-2]  #strip newline and comma
                 line = tuple(map(float, line.split('/')))
                 dspawn.append(line)
             if tstart <= i <= tend:
